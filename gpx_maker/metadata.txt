@@ -1,0 +1,47 @@
+# This file contains metadata for your plugin.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=GPX Maker for GARMIN® devices
+qgisMinimumVersion=3.0
+description=This plugin exports GPX files for GARMIN® devices.
+version=0.20240605
+author=Sanda Takeru
+email=takeru_sanda999@maff.go.jp
+
+about=This plugin exports GPX files, which you can import and view on your Garmin® device. Supporting point layers, line layers, and polygon layers. By optional setting, you can exports features without dissolving them. (Garmin® is trademarks of Garmin Ltd. or its subsidiaries, registered in the USA and other countries.)
+
+tracker=https://github.com/SandaTakeru/GPX-Maker-for-Garmin-devices/issues
+repository=https://github.com/SandaTakeru/GPX-Maker-for-Garmin-devices
+# End of mandatory metadata
+
+# Recommended items:
+
+hasProcessingProvider=yes
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=GPS, GNSS, GARMIN, GPX, Export, point, line, polygon
+
+homepage=https://github.com/SandaTakeru/GPX-Maker-for-Garmin-devices
+category=Analysis
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+
+# Since QGIS 3.8, a comma separated list of plugins to be installed
+# (or upgraded) can be specified.
+# Check the documentation for more information.
+# plugin_dependencies=
+
+Category of the plugin: Raster, Vector, Database or Web
+# category=
+
+# If the plugin can run on QGIS Server.
+server=False
+
