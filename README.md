@@ -18,8 +18,8 @@ Save it in the GPX folder inside your GARMIN device.<br>
 
 # How to Display on your Garmin devices (ex.GPSMAP67i)
 ### Polygons and lines
-Main menu > Track management > Track name > Menu > Display on map<br>
+Main Menu > Saved Tracks > Select Track > Menu > Show On Map<br>
 
 ### Points
 No special settings required. Displayed on the screen by default.<br>
-Main menu > Point manager (You can delete them individually.)
+Main Menu > Waypoint Manager (You can delete them individually.)
