@@ -17,6 +17,7 @@ Launch GPX Maker from the Processing Tools panel.<br>
 Save it in the GPX folder inside your GARMIN device.<br>
 
 # How to Display on your Garmin devices (ex.GPSMAP67i)
+![画像名](./67.bmp)<br>
 ### Polygons and lines
 Main Menu > Saved Tracks > Select Track > Menu > Show On Map<br>
 
