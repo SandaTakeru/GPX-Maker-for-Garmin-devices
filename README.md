@@ -9,7 +9,7 @@ Launch GPX Maker from the Processing Tools panel.<br>
 ![画像名](./002.png)<br>
 ① Select the vector layer to output<br>
 ② Select the display name on the GARMIN device (corresponding to the name attribute)<br>
-③ Additional option: Do not merge features, output them separately. Checking this box will ignore ② and set the attribute specified in ③ as the name attribute.<br>
+③ Additional option: If you set this option, Name field, features will not be dissolved and named by attribute.<br>
 ④ Set the destination to save the GPX file.<br>
 
 ## Preservation method
