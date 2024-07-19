@@ -3,17 +3,17 @@ This QGIS plugin outputs vector layers as GPX files, which you can import and vi
 
 # How to Make GPX
 ## starting method
-![画像名](./画像4.png)<br>
+![画像名](./001.png)<br>
 Launch GPX Maker from the Processing Tools panel.<br>
 ## Setting method
-![画像名](./画像5.png)<br>
+![画像名](./002.png)<br>
 ① Select the vector layer to output<br>
 ② Select the display name on the GARMIN device (corresponding to the name attribute)<br>
 ③ Additional option: Do not merge features, output them separately. Checking this box will ignore ② and set the attribute specified in ③ as the name attribute.<br>
 ④ Set the destination to save the GPX file.<br>
 
 ## Preservation method
-![画像名](./画像6.png)<br>
+![画像名](./003.png)<br>
 Save it in the GPX folder inside your GARMIN device.<br>
 
 # How to Display on your Garmin devices (ex.GPSMAP67i)
