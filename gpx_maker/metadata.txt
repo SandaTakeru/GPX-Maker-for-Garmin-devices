@@ -6,7 +6,7 @@
 name=GPX Maker for GARMIN® devices
 qgisMinimumVersion=3.0
 description=This plugin exports GPX files for GARMIN® devices.
-version=0.20240605
+version=0.20240719
 author=Sanda Takeru
 email=takeru_sanda999@maff.go.jp
 
@@ -20,7 +20,7 @@ repository=https://github.com/SandaTakeru/GPX-Maker-for-Garmin-devices
 
 hasProcessingProvider=yes
 # Uncomment the following line and add your changelog:
-# changelog=
+# changelog=The number of items requiring configuration has been reduced.The icons have been edited.
 
 # Tags are comma separated with spaces allowed
 tags=GPS, GNSS, GARMIN, GPX, Export, point, line, polygon
