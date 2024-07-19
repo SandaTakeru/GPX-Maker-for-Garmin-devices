@@ -27,7 +27,7 @@ tags=GPS, GNSS, GARMIN, GPX, Export, point, line, polygon
 
 homepage=https://github.com/SandaTakeru/GPX-Maker-for-Garmin-devices
 category=Analysis
-icon=icon.png
+icon=icon.svg
 # experimental flag
 experimental=False
 

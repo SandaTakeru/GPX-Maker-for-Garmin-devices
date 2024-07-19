@@ -70,7 +70,7 @@ class GpxMakerProvider(QgsProcessingProvider):
         return self.tr('GPX Maker for GARMIN® devices')
 
     def icon(self):
-        path = (Path(__file__).parent / "icon.png").resolve()
+        path = (Path(__file__).parent / "icon.svg").resolve()
         return QIcon(str(path))
 
     def longName(self):
