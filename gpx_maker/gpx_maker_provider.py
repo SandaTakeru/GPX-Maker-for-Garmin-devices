@@ -23,7 +23,7 @@ __copyright__ = '(C) 2024 by Sanda Takeru'
 __revision__ = '$Format:%H$'
 
 from pathlib import Path
-from PyQt5.QtGui import QIcon
+from qgis.PyQt.QtGui import QIcon
 
 from qgis.core import QgsProcessingProvider
 from .gpx_maker_algorithm import GpxMakerAlgorithm

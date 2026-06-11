@@ -6,12 +6,13 @@ __copyright__ = '(C) 2024 by Sanda Takeru'
 __revision__ = '$Format:%H$'
 
 from qgis.PyQt.QtCore import QCoreApplication
-from qgis.core import (QgsProcessing, QgsProcessingAlgorithm, QgsProcessingMultiStepFeedback,
+from qgis.core import (Qgis, QgsProcessing, QgsProcessingAlgorithm, QgsProcessingMultiStepFeedback,
                        QgsProcessingParameterVectorLayer, QgsProcessingParameterString,
-                       QgsProcessingParameterField, QgsProcessingParameterBoolean,
+                       QgsProcessingParameterField,
                        QgsProcessingParameterDefinition,
-                       QgsProcessingParameterFileDestination, QgsWkbTypes,
-                       QgsVectorLayer, QgsVectorFileWriter,
+                       QgsProcessingParameterFileDestination,
+                       QgsProcessingUtils,
+                       QgsVectorFileWriter,
                        QgsProject)
 import processing
 
@@ -24,11 +25,11 @@ GPX_OUTPUT = 'GPX_OUTPUT'
 class GpxMakerAlgorithm(QgsProcessingAlgorithm):
     def initAlgorithm(self, config=None):
         # Add parameters for the algorithm
-        self.addParameter(QgsProcessingParameterVectorLayer(VECTOR_LAYER, 'Vector Layer - Convert to GPX', types=[QgsProcessing.TypeVectorAnyGeometry], defaultValue=None))
+        self.addParameter(QgsProcessingParameterVectorLayer(VECTOR_LAYER, 'Vector Layer - Convert to GPX', types=[QgsProcessing.SourceType.TypeVectorAnyGeometry], defaultValue=None))
         self.addParameter(QgsProcessingParameterString(DISPLAY_NAME, 'Name on Device - 30 Characters or Less Recommended.', multiLine=False, defaultValue='Display Name'))
 
-        param = QgsProcessingParameterField(NAME_FIELD, 'Name Field - If setting this, features will not be dissolved.', type=QgsProcessingParameterField.String, parentLayerParameterName=VECTOR_LAYER, allowMultiple=False, defaultValue=None, optional=True)
-        param.setFlags(param.flags() | QgsProcessingParameterDefinition.FlagAdvanced)
+        param = QgsProcessingParameterField(NAME_FIELD, 'Name Field - If setting this, features will not be dissolved.', type=QgsProcessingParameterField.DataType.String, parentLayerParameterName=VECTOR_LAYER, allowMultiple=False, defaultValue=None, optional=True)
+        param.setFlags(param.flags() | QgsProcessingParameterDefinition.Flag.FlagAdvanced)
         self.addParameter(param)
 
         # Restrict the GPX parameter to '*.gpx' files
@@ -74,7 +75,7 @@ class GpxMakerAlgorithm(QgsProcessingAlgorithm):
                 return {}
 
             # Convert polygons to lines if necessary
-            if layer_type == QgsWkbTypes.PolygonGeometry:
+            if layer_type == Qgis.GeometryType.Polygon:
                 alg_params = {
                     'INPUT': next_input,
                     'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
@@ -84,7 +85,7 @@ class GpxMakerAlgorithm(QgsProcessingAlgorithm):
                 feedback.setCurrentStep(2)
 
             # Dissolve features if necessary
-            if (dissolve) and (not layer_type == QgsWkbTypes.PointGeometry):
+            if (dissolve) and (not layer_type == Qgis.GeometryType.Point):
                 alg_params = {
                     'FIELD': [''],
                     'INPUT': next_input,
@@ -96,7 +97,7 @@ class GpxMakerAlgorithm(QgsProcessingAlgorithm):
                 feedback.setCurrentStep(3)
 
             # Multipart to singleparts if layer_type == PointGeometry
-            if layer_type == QgsWkbTypes.PointGeometry:
+            if layer_type == Qgis.GeometryType.Point:
                 alg_params = {
                     'INPUT' : next_input,
                     'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
@@ -109,29 +110,35 @@ class GpxMakerAlgorithm(QgsProcessingAlgorithm):
             alg_params = {
                 'FIELDS_MAPPING': [{'expression': name_value , 'name': 'name', 'type': 10,'type_name': 'text'}],
                 'INPUT': next_input,
-                'OUTPUT': parameters[GPX_OUTPUT]
+                'OUTPUT': QgsProcessing.TEMPORARY_OUTPUT
             }
             outputs['RefactorFields'] = processing.run('native:refactorfields', alg_params, context=context, feedback=feedback, is_child_algorithm=True)
             feedback.setCurrentStep(5)
 
-            output_path = outputs['RefactorFields']['OUTPUT']
-            output_layer = QgsVectorLayer(output_path, 'Refactored Layer', 'ogr')
+            output_layer = QgsProcessingUtils.mapLayerFromString(outputs['RefactorFields']['OUTPUT'], context)
+
+            # TEMPORARY_OUTPUT 指定時は実際のテンポラリパスを生成する
+            output_file = parameters[GPX_OUTPUT]
+            if output_file == QgsProcessing.TEMPORARY_OUTPUT:
+                output_file = QgsProcessingUtils.generateTempFilename('output.gpx')
 
             # Write output with GPX options
             vector_options = QgsVectorFileWriter.SaveVectorOptions()
-            vector_options.actionOnExistingFile = QgsVectorFileWriter.CreateOrOverwriteFile
+            vector_options.driverName = 'GPX'
+            vector_options.actionOnExistingFile = QgsVectorFileWriter.ActionOnExistingFile.CreateOrOverwriteFile
             vector_options.fileEncoding = 'UTF-8'
-            vector_options.datasourceOptions = {'GPX_USE_EXTENSIONS': 'YES'}
-            vector_options.layerOptions = {'FORCE_GPX_TRACKS': 'YES'}
+            vector_options.datasourceOptions = ['GPX_USE_EXTENSIONS=YES']
+            vector_options.layerOptions = ['FORCE_GPX_TRACKS=YES']
 
             QgsVectorFileWriter.writeAsVectorFormatV2(
                 layer=output_layer,
-                fileName=parameters[GPX_OUTPUT],
+                fileName=output_file,
                 transformContext=QgsProject.instance().transformContext(),
                 options=vector_options
             )
 
-            results[GPX_OUTPUT] = parameters[GPX_OUTPUT]
+            results[GPX_OUTPUT] = output_file
+            feedback.pushInfo(f'出力完了: {output_file}')
             return results
         except Exception as e:
             feedback.reportError(str(e))
