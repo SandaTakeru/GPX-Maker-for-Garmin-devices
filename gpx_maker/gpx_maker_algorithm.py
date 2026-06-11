@@ -130,7 +130,7 @@ class GpxMakerAlgorithm(QgsProcessingAlgorithm):
             vector_options.datasourceOptions = ['GPX_USE_EXTENSIONS=YES']
             vector_options.layerOptions = ['FORCE_GPX_TRACKS=YES']
 
-            QgsVectorFileWriter.writeAsVectorFormatV2(
+            QgsVectorFileWriter.writeAsVectorFormatV3(
                 layer=output_layer,
                 fileName=output_file,
                 transformContext=QgsProject.instance().transformContext(),
